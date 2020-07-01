@@ -10,16 +10,19 @@ export default async function ({ debug, opt }) {
       if (!/\.(js|vue)$/.test(file.key)) {
         continue
       }
-      debug(file.key)
-      if (!this.fs.existsSync(file.path)) {
+
+      if (/^(node|other|runtime)\//.test(file.key)) {
         debug(`omit ${file.key}`)
+        continue
       }
+
+      debug(`check ${file.key}`)
 
       let report = cli.executeOnText(file.content, file.key)
       if (report.results.length === 0) {
         continue
       }
-      debug(`check ${file.key}`)
+
       if (report.results[0].messages.length !== 0) {
         hasError = true
         // eslint-disable-next-line

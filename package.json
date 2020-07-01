@@ -1,0 +1,30 @@
+{
+  "name": "@q/hotpack-eslint",
+  "version": "0.1.1",
+  "type": "module",
+  "description": "hotpack eslint plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duhongwei/hotpack-eslint.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duhongwei/hotpack-eslint/issues"
+  },
+  "homepage": "https://github.com/duhongwei/hotpack-eslint#readme",
+  "maintainers": [
+    {
+      "name": "duhongwei",
+      "email": "duhongwei@360.cn"
+    }
+  ],
+  "dependencies": {
+    "eslint": "^7.3.1"
+  }
+}

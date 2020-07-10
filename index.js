@@ -10,7 +10,9 @@ export default async function ({ debug, opt }) {
       if (!/\.(js|vue)$/.test(file.key)) {
         continue
       }
-
+      if (/\.min\.js$/.test(file.key)) {
+        continue
+      }
       if (/^(node|other|runtime)\//.test(file.key)) {
         debug(`omit ${file.key}`)
         continue

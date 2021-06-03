@@ -1,3 +1,19 @@
+//https://eslint.org/docs/developer-guide/nodejs-api  eslint 文档
+//https://eslint.vuejs.org/user-guide/#installation   eslint-plugin-vue 文档
+
+// Example .eslintrc.js:
+/* module.exports = {
+  extends: [
+    // add more generic rulesets here, such as:
+    // 'eslint:recommended',
+    'plugin:vue/vue3-recommended',
+    // 'plugin:vue/recommended' // Use this if you are using Vue.js 2.x.
+  ],
+  rules: {
+    // override/add rules settings here, such as:
+    // 'vue/no-unused-vars': 'error'
+  }
+} */
 import eslint from 'eslint'
 let CLIEngine = eslint.CLIEngine
 export default async function ({ debug, opt }) {

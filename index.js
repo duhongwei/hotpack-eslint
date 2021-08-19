@@ -1,27 +1,21 @@
-//https://eslint.org/docs/developer-guide/nodejs-api  eslint 文档
-//https://eslint.vuejs.org/user-guide/#installation   eslint-plugin-vue 文档
+//https://eslint.org/docs/developer-guide/nodejs-api  
+//https://eslint.vuejs.org/user-guide/#installation  
 
-// Example .eslintrc.js:
-/* module.exports = {
-  extends: [
-    // add more generic rulesets here, such as:
-    // 'eslint:recommended',
-    'plugin:vue/vue3-recommended',
-    // 'plugin:vue/recommended' // Use this if you are using Vue.js 2.x.
-  ],
-  rules: {
-    // override/add rules settings here, such as:
-    // 'vue/no-unused-vars': 'error'
-  }
-} */
-import eslint from 'eslint'
-let CLIEngine = eslint.CLIEngine
-export default async function ({ debug, opt }) {
-  const cli = new CLIEngine();
+import { join } from 'path'
+import { ESLint } from 'eslint'
+
+export default async function ({ debug, opt: { eslintOpt = {}, abort = 0 } }) {
+  const eslint = new ESLint(eslintOpt)
+
   this.on('afterSlim', async function (files) {
+
     debug('on event afterSlim')
+
     let hasError = false
-    let formatter = cli.getFormatter();
+    let hasWarn = false
+    let hasFixableError = false
+    let hasFixableWarn = false
+
     for (let file of files) {
       if (!/\.(js|vue)$/.test(file.key)) {
         continue
@@ -33,30 +27,59 @@ export default async function ({ debug, opt }) {
         debug(`omit ${file.key}`)
         continue
       }
-
+    
       debug(`check ${file.key}`)
 
-      let report = cli.executeOnText(file.content, file.key)
-      if (report.results.length === 0) {
-        continue
+      let report = await eslint.lintText(file.content, { filePath: join(this.config.src, file.key) })
+     /**
+      * writes code modified by ESLint's autofix feature into its respective file.
+      * If any of the modified files don't exist, this method does nothing
+      */
+      await ESLint.outputFixes(report);
+
+      report = report[0]
+
+      if (report.errorCount + report.fatalErrorCount + report.warningCount > 0) {
+        
+        if (report.errorCount + report.fatalErrorCount > 0) {
+          hasError = true
+        }
+        if (report.warningCount > 0) {
+          hasWarn = true
+        }
+        if (report.fixableErrorCount) {
+          hasFixableError = true
+        }
+        if (report.fixableWarningCount) {
+          hasFixableWarn = true
+        }
+
+        const formatter = await eslint.loadFormatter("stylish");
+        const resultText = formatter.format([report]);
+        console.log(resultText)
+      
       }
 
-      if (report.results[0].messages.length !== 0) {
-        hasError = true
-        // eslint-disable-next-line
-        console.log(formatter(report.results));
-        CLIEngine.outputFixes(report);
-      }
-
-      if (report.results[0].output && file.content !== report.results[0].output) {
-        this.config.logger.log(`autofix ${file.key}`)
-      }
     }
-    //无论是错误还是警告如果不能自动修复都停止运行，如果编辑器有自动保存功能，请先关闭编辑器
-    if (hasError) {
-      if (opt.errorBreak) {
-        this.config.logger.error('请先修复问题', true)
+    if (hasFixableError) {
+      console.log(`
+    some errors can be automatically repaired,edit config file ${this.isDev() ? 'dev.js' : 'pro.js'}
+    plugin: [
+      {
+        ...
+        name: 'eslint',
+        opt: {
+          eslintOpt: { fix: true }
+        }
       }
+    ]
+     `)
+    }
+    if (abort === 1 && hasError) {
+      this.config.logger.error('fix please!', true)
+    }
+    if (abort === 2 && (hasError || hasWarn)) {
+      this.config.logger.error('fix please! ', true)
     }
   })
 }

@@ -1,6 +1,6 @@
 {
-  "name": "@q/hotpack-eslint",
-  "version": "0.2.0",
+  "name": "@duhongwei/hotpack-eslint",
+  "version": "0.3.0",
   "type": "module",
   "description": "hotpack eslint plugin",
   "main": "index.js",
@@ -21,11 +21,11 @@
   "maintainers": [
     {
       "name": "duhongwei",
-      "email": "duhongwei@360.cn"
+      "email": "jack_xxxx@163.com"
     }
   ],
   "dependencies": {
-    "eslint": "^7.27.0",
-    "eslint-plugin-vue": "^7.10.0"
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^7.16.0"
   }
 }

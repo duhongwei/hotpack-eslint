@@ -3,7 +3,7 @@
 eslint  plugin for [hotpack](https://github.com/duhongwei/hotpack)
 
 ```bash
-npm install @duhongwei/hotpack-eslint
+npm install --save-dev @duhongwei/hotpack-eslint
 ```
 
 ## usage

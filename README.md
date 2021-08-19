@@ -2,6 +2,10 @@
 
 eslint  plugin for [hotpack](https://github.com/duhongwei/hotpack)
 
+```bash
+npm install @duhongwei/hotpack-eslint
+```
+
 ## usage
 ```js
 import  babel from '@duhongwei/hotpack-eslint'
@@ -32,4 +36,11 @@ the same as eslint constructor options
 const eslint = new ESLint(options);
 ```
 
-[detail](https://eslint.org/docs/developer-guide/nodejs-api#-new-eslintoptions)
+[eslint options detail](https://eslint.org/docs/developer-guide/nodejs-api#-new-eslintoptions)
+
+### config
+
+Generally speaking, it is recommended to put a configuration file in the project root directory
+
+[Configuring ESLint](https://eslint.org/docs/user-guide/configuring/)
+
